@@ -1,0 +1,61 @@
+.cv-name{
+   border: 2px solid black;
+   padding: 1rem;
+   width: max-content;
+
+}
+.flex-row{
+    display: flex;
+    align-items: center;
+}
+.flex-column{
+    display: flex;
+    flex-direction: column;
+}
+.person-info-holder{
+   
+    gap: 1rem;
+}
+.personal-info-form{
+  gap: 1rem;
+}
+.header-form{
+    gap: 0.5rem;
+}
+.upload-img-btn{
+    width: fit-content;
+}
+.add-image{
+    width: 4rem;
+    aspect-ratio: 1;
+}
+.pic-upload-btn{
+    padding: 0.2rem;
+    border-bottom: 1px solid black;
+}
+.profile-pic{
+    width: 130px;
+    aspect-ratio: 1;
+}
+.photo-title{
+    margin: 0;
+    padding: 0;
+    font-weight: 400;
+    font-size: 1.5rem;
+}
+.school-start,.school-end,.job-start,.job-end{
+    display: grid;
+    grid-template-areas: "label label"
+                          "month year";
+
+}
+.school-start-label,.school-end-label,.job-start-label{
+    grid-area: label;
+}
+.school-start-month,.school-end-month,.job-start-month,.job-end-month{
+    grid-area: month;
+
+}
+.school-start-year,.school-end-year,.job-end-year,.job-start-year{
+    grid-area: year;
+}
