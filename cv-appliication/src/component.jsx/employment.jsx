@@ -6,7 +6,7 @@ let educationObj = [
         id:"0",
         'user-education':"Ms",
         'user-school':"high school",
-        'employer-city':"La",
+        'school-place':"La",
         'school-start-month':"9",
         'school-start-year':"2020",
         'school-end-month':"2",
@@ -16,8 +16,8 @@ let educationObj = [
     {
         id:"1",
         'user-education':"dev",
-        'user-school':"high school",
-        'employer-city':"La",
+        'user-school':"uni ",
+        'school-place':"La",
         'school-start-month':"9",
         'school-start-year':"2020",
         'school-end-month':"2",
@@ -31,7 +31,7 @@ function addEducation(){
         id:"3",
         'user-education':"new",
         'user-school':"high school",
-        'employer-city':"La",
+        'school-place':"La",
         'school-start-month':"9",
         'school-start-year':"2020",
         'school-end-month':"2",
@@ -41,16 +41,12 @@ function addEducation(){
     return data
 }
 
-let data = educationObj[0]
+
 function EducationInfo(){
-    // const educationList = educationObj.map(education =>
-    //     <NavTemplate key={education.id} text={'Education'}>
-    //         <EducationFormHolder/>
-    //     </NavTemplate>
-    // );
     return(
         <NavTemplate  text={'Education'}>
             <EducationFormHolder/>
+            
         </NavTemplate>
     )
 
@@ -62,49 +58,34 @@ function EducationFormHolder(){
         list.push(addEducation())
         setEducation(list)
         console.log(list)
-    }
-    const handleDelete = (e) => {
-        
-        
-        
-        setEducation(education.filter(ed=> ed.id !== e.target.id))
-        // delete from local storage
-        console.log(education)
+        //save here
     }
     
+    const handleDelete = (e) =>{
+        let list = [...education]
+        const remain = list.filter(education => education.id !== e.target.id)
+        //console.log(remain)
+        setEducation(remain)
+        //save here
+        
+    }
     const educationList = education.map(education =>{
         return(
-            <Template key={education.id} title={education["user-education"]} id={education.id} handleDelete={handleDelete}>
-                <>
-                    <Education key={education.id}/>
-                   
-                </>
-            </Template>
+            <>
+                <Education key={education.id} data={education} handleDelete={handleDelete}/>
+            </>
         )
-    
     });
-  
-  
-    
     return(
         <>
-            
             {educationList}
             <button onClick={handleClick}>Add more</button>
         </>
     )
 }
-function Template({children,title,name,city,id ,handleDelete,handleEdit}){
+function Template({title,name,city,id ,handleDelete,handleEdit}){
     
     
-    const [ showForm,setShowForm] = useState(false)
-    const handleClick = () =>{
-        setShowForm(!showForm)
-    }
-   
-    if(showForm === true){
-        return(children)
-    }
     return(
         <div className="education-info flex-row">
             <div className="info">
@@ -115,19 +96,33 @@ function Template({children,title,name,city,id ,handleDelete,handleEdit}){
                 </div>
             </div>
             <div className="btn-holder flex-row">
-                <button onClick={handleEdit} id={id}>edit</button>
+                <button onClick={handleEdit}  id={id}>edit</button>
                 <button onClick={handleDelete} id={id}>delete</button>
             </div>
         </div>
     )
     
 }
-function Education(){
+function Education({data,handleDelete}){
     const[person,setPerson] = useState(data);
+    console.log(data)
+    const [showForm,setShowForm] =useState(false)
+    
     const handleInputChange = (e)=>{
         setPerson({...person,[e.target.name]:e.target.value})
     }
+    const hideForm = () =>{
+        setShowForm(!showForm)
+    }
    
+   
+    if(showForm === false){
+        return(
+            <>
+                <Template key={person.id} handleDelete={handleDelete} handleEdit={hideForm} title={person['user-education']} name={person['user-school']} city={person['user-school-city']} id={person.id}/>
+            </>
+        )
+    }
     return(
     
         <div className="education-form flex-column">
@@ -139,8 +134,8 @@ function Education(){
                     <input type="text" id="user-school" name="user-school" value={person['user-school']} onChange={handleInputChange}/>
                 </div>
                 <div className="flex-column">
-                    <label htmlFor="user-city">City</label>
-                    <input type="text" id="user-city" name="user-city" value={person['user-city']} onChange={handleInputChange}/>
+                    <label htmlFor="school-place">City</label>
+                    <input type="text" id="school-place" name="school-place" value={person['school-place']} onChange={handleInputChange}/>
                 </div>
                 
             </div>
@@ -159,6 +154,7 @@ function Education(){
             </div>
             <label htmlFor="about-school">Description</label>
             <textarea name="about-school" id="about-school" value={person['about-school']} onChange={handleInputChange}></textarea>
+            <button onClick={hideForm}>Done</button>
         </div>
 
     )
@@ -220,6 +216,7 @@ YearInput.propTypes = {
     onchange:PropTypes.func,
 }
 let employmentObj = [{
+    id:"10",
     'user-position':"Jr",
     'user-employer':"Tde",
     'employer-city':"Texas",
@@ -229,19 +226,44 @@ let employmentObj = [{
     'job-end-year':"2023",
     'about-job':"good work place"
 
+},
+{
+    id:"11",
+    'user-position':"senior",
+    'user-employer':"here",
+    'employer-city':"galaxy",
+    'job-start-month':"9",
+    'job-start-year':"2020",
+    'job-end-month':"2",
+    'job-end-year':"2023",
+    'about-job':"nice work place"
+
 }]
 let employmentData = employmentObj[0]
 function EmploymentInfo(){
     return(
         <NavTemplate text={'Employment'}>
-            <Employment/>
+            <EmploymentFormHolder/>
         </NavTemplate>
     )
 }
-function Employment(){
-    const [person,setPerson] = useState(employmentData)
+function Employment({data,handleDelete}){
+    const [person,setPerson] = useState(data);
+    const [showForm,setShowForm] =useState(false);
     const handleInputChange = (e) =>{
-        setPerson({...person,[e.target.name]:e.target.value})
+        setPerson({...person,[e.target.name]:e.target.value});
+    }
+    const hideForm = () =>{
+        setShowForm(!showForm)
+    }
+   
+   
+    if(showForm === false){
+        return(
+            <>
+                <Template key={person.id} handleDelete={handleDelete} handleEdit={hideForm} title={person['user-position']} name={person['user-employer']} city={person['employer-city']} id={person.id}/>
+            </>
+        )
     }
     //save local storage
     return(
@@ -276,8 +298,41 @@ function Employment(){
             </div>
             <label htmlFor="about-job">Description</label>
             <textarea name="about-job" id="about-job" value={person['about-job']}></textarea>
+            <button onClick={hideForm}>Done</button>
         </div>
 
+    )
+}
+function EmploymentFormHolder(){
+    const [employment,setEmployment] = useState(employmentObj)
+    const handleClick = () =>{
+        let list = [...employment]
+        list.push(addEducation())
+        setEmployment(list)
+        console.log(list)
+        //save here
+    }
+    
+    const handleDelete = (e) =>{
+        let list = [...employment]
+        const remain = list.filter(workPlace => workPlace.id !== e.target.id)
+        //console.log(remain)
+        setEmployment(remain)
+        //save here
+        
+    }
+    const employmentList = employment.map(work =>{
+        return(
+            <>
+                <Employment key={work.id} data={work} handleDelete={handleDelete}/>
+            </>
+        )
+    });
+    return(
+        <>
+            {employmentList}
+            <button onClick={handleClick}>Add more</button>
+        </>
     )
 }
 export{EducationInfo,EmploymentInfo}
